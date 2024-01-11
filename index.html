@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <title>Heritage Walks</title>
     <link href="styles.css" rel="stylesheet">
     
@@ -12,7 +12,7 @@
     <header class="navbar navbar-expand-lg navbar-dark bg-secondary">
         <div class="container-fluid">
             <div class="navbar-brand">
-                <img src="./img/logo.png" alt="Логотип" class="d-inline-block align-middle mx-3" style="height: 80px;"> 
+                <img src="./img/logo.png" alt="Логотип" class="d-inline-block align-middle mx-3" style="height: 70px;"> 
                 <span class="ms-2 align-middle">Heritage Walks</span>
             </div>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -30,7 +30,14 @@
             </div>
         </div>
     </header>
-    
+    <div class="container">
+        <div class="alertss">
+          <div class="alert" alert-primary alert-dismissible>
+            0 новых сообщений
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        </div>
+      </div>
 
     <section class="container my-4">
         <div class="row">
@@ -73,11 +80,11 @@
         </div>
     </section>
 
-    <section class="container mt-3">
+    <section id='routes' class="container mt-3">
         <h2 class="mb-3">Список пешеходных маршрутов</h2>
-    <form class="mb-3" onsubmit="searchRoutes(); return false;">
+    <form class="mb-3" onsubmit="searchRoutes()">
         <div class="row g-3">
-            <div class="col-md-6">
+            <div class="col-md-6 mb-3">
                 <input type="text" class="form-control" id="routeNameInput" placeholder="🔍 Поиск по названию">
             </div>
             <div class="col-md-6">
@@ -86,9 +93,10 @@
             </select>
           </div>
         </div>
-        <button type="submit" class="btn btn-primary mt-3">Найти маршрут</button>
+        <button type="submit" class="btn btn-primary">Найти маршрут</button>
+        <button type="button" class="btn btn-secondary" onclick="resetSearch()">Сбросить</button>
       </form>
-      <table class="table table-bordered table-striped text-center">
+      <table class="table table-bordered text-center">
         <thead class="thead-dark">
           <tr>
             <th>Название</th>
@@ -110,5 +118,6 @@
         
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>

@@ -94,7 +94,7 @@ function guideDownload(id) {
                 console.log(i, 'id guid')
                 let row = document.createElement("tr");
                 row.innerHTML = `
-            <th scope="col" id = "${response[i].name}" name = "${i}"><img src="imgs/1.png"></th>
+            <th scope="col" id = "${response[i].name}" name = "${i}"><img src="img/user.jpg"></th>
             <th scope="col" id = "${response[i].name}" name = "${i}">${response[i].name}</th>
             <th scope="col" id = "${response[i].name}" name = "${i}">${response[i].language}</th>
             <th scope="col" id = "${response[i].name}" name = "${i}">${response[i].workExperience}</th>

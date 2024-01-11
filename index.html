@@ -85,7 +85,7 @@
         <div class="w-100 mainMap" id="mainMap"></div> 
       </section>
 
-    <section id='routes' class="container mt-3">
+    <section id class="container mt-3">
         <h2 class="mb-3" id="way">Список пешеходных маршрутов</h2>
     <form class="mb-3" onsubmit="searchRoutes()">
         <div class="row g-3">
@@ -104,15 +104,15 @@
       <table class="table table-bordered text-center">
         <thead class="thead-dark">
           <tr>
-            <th>Название</th>
+            <th>Название</th>   
             <th>Описание</th>
             <th>Основные объекты</th>
             <th>Выбрать</th>
           </tr>
           </thead>
-        <tbody id="routesTableBody"></tbody>
+        <tbody id="routesTable"></tbody>
       </table>
-      <ul class="pagination justify-content-center" id="pagination"></ul>
+      <ul class="pagination justify-content-center flex-wrap" id="pagination"></ul>
       </section>
       <section class="guide-choise container my-5">
         <h3>Доступные гиды по маршруту </h3>
@@ -145,6 +145,34 @@
         </table>
     </section>
 
+    
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Модальное окно</h2>
+            <p>Имя гида: <span id="modalGuideName"></span></p>
+            <p>Язык: <span id="modalLanguage"></span></p>
+            <p>Имя маршрута: <span id="modalRouteName"></span></p>
+            <p>Опыт работы: <span id="modalWorkExperience"></span></p>
+            <p>Стоимость за час: <span id="modalPricePerHour"></span></p>
+            <label for="time">Время начала экскурсии:</label>
+            <input type="time" id="time" name="time">
+            <label for="duration">Длительность экскурсии (в часах):</label>
+            <input type="number" id="duration" name="duration" min="1" value="1">
+            <label for="date">Дата экскурсии:</label>
+            <input type="date" id="date" name="date">
+            <label for="peopleCount">Количество человек:</label>
+            <input type="number" id="peopleCount" name="peopleCount" min="1" value="1">
+            <label for="pensionerDiscount">Скидка для пенсионеров:</label>
+            <input type="checkbox" id="pensionerDiscount" name="pensionerDiscount">
+            <label for="interactiveGuide">Интерактивный путеводитель:</label>
+            <input type="checkbox" id="interactiveGuide" name="interactiveGuide">
+            <p>Итоговая стоимость: <span id="totalPrice"></span></p>
+            <button class="button cancel-button">Отменить</button>
+            <button class="button">Отправить заявку</button>
+        </div>
+    </div>
+      
         <footer class="bg-secondary text-white text-center py-3">
             <div class="container">
                 © 2024 Heritage Walks | Тел: +7 (495) 123-45-67 | Email: info@heritagewalks.ru

@@ -6,7 +6,7 @@ const API_KEY = '759c7f23-7978-40b0-be25-b616c37640d0'
  
 let routesData;
 let filteredRoutes;
-  
+let guideServiceCost; 
 const itemsPerPage = 10;
 let currentPage = 1;
 
@@ -82,40 +82,37 @@ function clickHandler(event) {
 }
 function guideDownload(id) {
     let guideTable = document.querySelector('.guide-table');
-    let arroption = [];
+    let languageOptions = new Set();
     fetch(`${HOST}/api/routes/${id}/guides?api_key=${API_KEY}`)
         .then(response => response.json())
-        .then(response => {
-            arroption = [];
-        
-            removeOptions(document.getElementById('select_language'));
+        .then(guides => {
             guideTable.innerHTML = '';
-            for (let i in response) {
-                console.log(i, 'id guid')
+            guides.forEach(guide => {
                 let row = document.createElement("tr");
                 row.innerHTML = `
-            <th scope="col" id = "${response[i].name}" name = "${i}"><img src="img/user.jpg"></th>
-            <th scope="col" id = "${response[i].name}" name = "${i}">${response[i].name}</th>
-            <th scope="col" id = "${response[i].name}" name = "${i}">${response[i].language}</th>
-            <th scope="col" id = "${response[i].name}" name = "${i}">${response[i].workExperience}</th>
-            <th scope="col" id = "${response[i].name}" name = "${i}">${response[i].pricePerHour}</th>
-            <th scope="col" id = "${response[i].name}" name = "${i}">
-            <button class = "rounded-3 choose" id = "${response[i].name}" name = "${i}">Выбрать</button></th> 
-            `;
-            if ((document.getElementById('guide-input-expfrom').value != '' &&
-            document.getElementById('guide-input-expfrom').value > response[i].workExperience) ||
-            (document.getElementById('guide-input-expto').value != '' &&
-            document.getElementById('guide-input-expto').value < response[i].workExperience) &&
-            document.getElementById('select_language').value == response[i].language) {
-                row.classList.add("d-none");
-            }
-            guideTable.append(row);
-            arroption.push(response[i].language);
-        }
-        console.log(arroption);
-        createselect(getoptionforselect(arroption));
-        });
+                    <td><img src="img/user.jpg"></td>
+                    <td>${guide.name}</td>
+                    <td>${guide.language}</td>
+                    <td>${guide.workExperience}</td>
+                    <td>${guide.pricePerHour}</td>
+                `;
+                let selectCell = document.createElement('td');
+                let selectButton = document.createElement("button");
+                selectButton.textContent = 'Выбрать';
+                selectButton.classList.add('choose-button');
+                selectButton.addEventListener('click', () => openModal(guide.name, 'Название маршрута', guide.language, guide.workExperience, guide.pricePerHour));
+                selectCell.appendChild(selectButton);
+                row.appendChild(selectCell);
+                guideTable.appendChild(row);
+
+                languageOptions.add(guide.language);
+            });
+            removeOptions(document.getElementById('select_language'));
+            createselect(Array.from(languageOptions));
+        })
+        .catch(error => console.error('Ошибка при получении данных о гидах:', error));
 }
+
 function searchRoutes() {
     const searchKeyword = document.getElementById('routeNameInput')
         .value.toLowerCase();
@@ -295,11 +292,112 @@ function createselect(arr) {
 }
 
 
+function openModal(guideName, routeName, language, workExperience, pricePerHour) {
+    document.getElementById('modalGuideName').textContent = guideName;
+    document.getElementById('modalRouteName').textContent = routeName;
+    document.getElementById('modalLanguage').textContent = language;
+    document.getElementById('modalWorkExperience').textContent = workExperience;
+    document.getElementById('modalPricePerHour').textContent = pricePerHour;
+    guideServiceCost = pricePerHour;
+    calculateTotalPrice();
+
+    var modal = document.getElementById('myModal');
+    modal.style.display = 'block';
+}
+
+
+function calculateTotalPrice() {
+    let pricePerHour = parseFloat(document.getElementById('modalPricePerHour').textContent);
+    let duration = parseInt(document.getElementById('duration').value, 10); 
+    let peopleCount = parseInt(document.getElementById('peopleCount').value, 10);
+    let time = document.getElementById('time').value; 
+
+    let totalPrice = pricePerHour * duration; 
+
+    totalPrice += isMorning(time) ? 400 : 0;
+    totalPrice += isEvening(time) ? 1000 : 0;
+
+    if (peopleCount > 5 && peopleCount <= 10) {
+        totalPrice += 1000;
+    } else if (peopleCount > 10 && peopleCount <= 20) {
+        totalPrice += 1500;
+    }
+
+    if (document.getElementById('pensionerDiscount').checked) {
+        totalPrice *= 0.75; 
+    }
+    if (document.getElementById('interactiveGuide').checked) {
+        totalPrice *= 1.5; 
+    }
+
+
+    document.getElementById('totalPrice').textContent = totalPrice.toFixed(2) + ' руб.';
+}
+
+
+    
+  function isMorning(time) {
+
+    return time >= '09:00' && time < '12:00';
+  }
+  
+  function isEvening(time) {
+    return time >= '20:00' && time <= '23:00';
+  }
+  
+  function closeModal() {
+    var modal = document.getElementById('myModal');
+    modal.style.display = 'none';
+  }
+
+  document.querySelectorAll('.choose-button').forEach(button => {
+    button.addEventListener('click', openModal);
+  });
+  var closeButton = document.querySelector('.close-button');
+  if (closeButton) {
+    closeButton.addEventListener('click', closeModal);
+  }
+  
+  window.addEventListener('click', function(event) {
+    var modal = document.getElementById('myModal');
+    if (event.target === modal) {
+      closeModal();
+    }
+  });
+  
+
+var modal = document.getElementById("myModal");
+var span = document.getElementsByClassName("close")[0];
+
+span.onclick = function() {
+  modal.style.display = "none";
+}
+
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+
 window.onload = function() {
+    document.getElementById('duration').addEventListener('change', calculateTotalPrice);
+    document.getElementById('peopleCount').addEventListener('change', calculateTotalPrice);
+    document.getElementById('time').addEventListener('change', calculateTotalPrice);
     document.getElementById('guide-input-expfrom').oninput = guideOptions;
     document.getElementById('guide-input-expto').oninput = guideOptions;
     document.getElementById('select_language').onchange = guideOptions;
+    document.getElementById('pensionerDiscount').addEventListener('change', calculateTotalPrice);
+    document.getElementById('interactiveGuide').addEventListener('change', calculateTotalPrice);
     const table = document.querySelector('.table');
     table.addEventListener('click', clickHandler);
+    document.getElementById('duration').addEventListener('change', function() {
+        calculateTotalPrice(guideServiceCost);
+    });
+    document.getElementById('peopleCount').addEventListener('change', function() {
+        calculateTotalPrice(guideServiceCost);
+    });
+    document.getElementById('time').addEventListener('change', function() {
+        calculateTotalPrice(guideServiceCost);
+    });
     fetchRoutesFromApi();
 };

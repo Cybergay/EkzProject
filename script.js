@@ -12,12 +12,12 @@ let currentPage = 1;
 
 
 function clearTable() {
-    const tableBody = document.getElementById('routesTableBody');
+    const tableBody = document.getElementById('routesTable');
     tableBody.innerHTML = '';
 }
 
 function addRoutesToTable(routes) {
-    const tableBody = document.getElementById('routesTableBody');
+    const tableBody = document.getElementById('routesTable');
   
     routes.forEach(route => {
         const row = tableBody.insertRow();
@@ -217,7 +217,7 @@ function handlePageClick(pageNumber) {
 }
   
 function highlightSearchResult(searchKeyword) {
-    const tableBody = document.getElementById('routesTableBody');
+    const tableBody = document.getElementById('routesTable');
     const rows = tableBody.getElementsByTagName('tr');
   
     for (let i = 0; i < rows.length; i++) {

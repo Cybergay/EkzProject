@@ -6,7 +6,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <title>Heritage Walks</title>
     <link href="styles.css" rel="stylesheet">
-    
+    <script src="https://mapgl.2gis.com/api/js/v1"></script>
 </head>
 <body>
     <header class="navbar navbar-expand-lg navbar-dark bg-secondary">
@@ -80,6 +80,11 @@
         </div>
     </section>
 
+    <section class="container py-2 text-center gx-2">
+        <h2>Карта</h2>
+        <div class="w-100 mainMap" id="mainMap"></div> 
+      </section>
+
     <section id='routes' class="container mt-3">
         <h2 class="mb-3">Список пешеходных маршрутов</h2>
     <form class="mb-3" onsubmit="searchRoutes()">
@@ -107,8 +112,38 @@
           </thead>
         <tbody id="routesTableBody"></tbody>
       </table>
-      <ul class="pagination" id="pagination"></ul>
+      <ul class="pagination justify-content-center" id="pagination"></ul>
       </section>
+      <section class="guide-choise container my-5">
+        <h3>Доступные гиды по маршруту </h3>
+        <div class="selected-route">
+        </div>
+        <div class="row">
+            <div class="col-6 col-lg-4">
+                <select name="guide-lang" id = "select_language">
+                    <option value="">Язык экскурсии</option>
+                </select>
+            </div>
+            <div class="col-6 col-lg-4">
+                Опыт работы:
+                <input type="number" id="guide-input-expfrom" placeholder="от" class="w-25">
+                <input type="number" id="guide-input-expto" placeholder="до" class="w-25">
+            </div>
+        </div>
+        <table class="guide-table table-bordered mt-3">
+            <thead class="p-color">
+                <tr>
+                    <th class="col me-5 text-center" >ФИО</th>
+                    <th class="col me-5 text-center">Языки</th>
+                    <th class="col me-5 text-center">Опыт работы</th>
+                    <th class="col me-5 text-center">Стоимость услуг в час</th>
+                    <th class="col me-5 text-center">Выбрать</th>
+                </tr>
+            </thead>
+            <tbody id="routesTableBody" class="s-color" >
+            </tbody>
+        </table>
+    </section>
 
         <footer class="bg-secondary text-white text-center py-3">
             <div class="container">
@@ -119,5 +154,16 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="script.js"></script>
+    <script>
+        const map = new mapgl.Map('mainMap', {
+          center: [37.6156,	55.7522],
+          zoom: 13,
+          key: '0450e79e-4ef9-4dd5-a04b-269f4e8d15e6',
+        });
+    
+        const marker = new mapgl.Marker(map, {
+          coordinates: [37.6156, 55.7522],
+        });
+      </script>
 </body>
 </html>
